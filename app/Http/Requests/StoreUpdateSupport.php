@@ -24,23 +24,19 @@ class StoreUpdateSupport extends FormRequest
     {
         $rules = [
             'subject' => 'required|min:3|max:255|unique:supports',
-            'body' => [
+            'body' => ['required', 'min:3', 'max:100000'],
+        ];
+    
+        if ($this->method() === 'PUT') {
+            $rules['subject'] = [
                 'required',
                 'min:3',
-                'max:100000',
-            ],
-        ];
-
-        if ($this->method() === 'PUT' || $this->method() === 'PATCH') {
-            $rules['subject'] = [
-                'required', // 'nullable',
-                'min:3',
                 'max:255',
-                // "unique:supports,subject,{$this->id},id",
-                Rule::unique('supports')->ignore($this->support ?? $this->id),
+                //"unique:supports,subject,{$this->id},id"
+                Rule::unique('supports')->ignore($this->id),
             ];
         }
-
+    
         return $rules;
     }
 }

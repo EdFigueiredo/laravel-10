@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUpdateSupport;
 use App\Models\Support;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
@@ -23,13 +24,14 @@ class SupportController extends Controller
         return view('admin/supports/create');
     }
 
-    public function store(Request $request, Support $support)
+    public function store(StoreUpdateSupport $request, Support $support)
     {
         //dd($request->all());
         //dd($request->body); // Aqui eu pego o valor do campo body
         //dd($request->only('subject','status', 'body'));
         //dd($request->get('xpto', 'default')); // Aqui eu pego o valor do campo xpto, se não existir, ele retorna o valor default
-        $data = $request->all();
+        //$data = $request->all();
+        $data = $request->validate(); // Aqui eu valido os campos conforme as regras que eu defini no arquivo StoreUpdateSupport.php
         $data['status'] = 'a';
         //Support::created($data); //Chama o model Support e chama o método create passando o array $data
         //$support = $support->create($data); // Aqui eu crio um objeto do tipo Support e chamo o método create passando o array $data
@@ -60,7 +62,7 @@ class SupportController extends Controller
         return view('admin.supports.edit', compact('support'));
     }
 
-    public function update(Request $request, Support $support, string | int $id)
+    public function update(StoreUpdateSupport $request, Support $support, string | int $id)
     {
         if(!$support = $support->find($id))
         {
@@ -70,10 +72,12 @@ class SupportController extends Controller
         //$support->subject = $request->subject; //posso faver dessa forma também passando direto o que quero editar
         //$support->body = $request->body;
         //$support->save(); // Aqui eu chamo o método save para salvar as alterações feitas acima, porém para muitos campos tem que fazer um a uma, por isso é melhor usar o método update
-        $support->update($request->only(
-            'subject',
-            'body'
-        ));
+        
+        // $support->update($request->only( //usar o only ou validate para validar os campos
+        //     'subject',
+        //     'body'
+        // ));
+        $support->update($request->validate()); // anteriormente eu usava o only, mas agora estou usando o validate para validar os campos
 
         return redirect()->route('supports.index');
     }
