@@ -5,15 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateSupport;
 use App\Models\Support;
+use App\Services\SupportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
 class SupportController extends Controller
 {
-    public function index(Support $support) // Aqui o laravel já cria o objeto do tipo Support e injeta na varivel $support
+
+    public function __construct(protected SupportService $service)
+    {
+        
+    }
+    
+    public function index(Request $request) // Aqui o laravel já cria o objeto do tipo Support e injeta na varivel $support
     {
         //$support = new Support(); // Sem eu precisar criar o objeto, o laravel já faz isso pra mim
-        $supports = $support->all();
+        $supports = $this->service->getAll($request->filter); // Aqui eu chamo o método getAll do service e passo o filtro que eu quero
         //dd($supports);
 
         return view('admin.supports.index', compact('supports')); // aqui posso usar tanto o . quando / para separar os diretórios
@@ -45,7 +52,8 @@ class SupportController extends Controller
     {
         //Support::where('id', $id)->first(); // Aqui eu chamo o model Support e chamo o método where passando o id e chamo o método first
         //Support::where('id', '!=' ,$id)->first(); // Quando náo passo nada conforme acima ele já coloca como igual
-        if(!$support = Support::find($id))
+        //if(!$support = Support::find($id)) // antes com mvc
+        if(!$support = $this->service->findOne($id)) // agora com restful
         {
             return back();
         }
@@ -53,9 +61,10 @@ class SupportController extends Controller
 
     }
 
-    public function edit(Support $support, string | int $id)
+    public function edit(string $id)
     {
-        if(!$support = $support->where('id', $id)->first())
+        //if(!$support = $support->where('id', $id)->first())
+        if(!$support = $this->service->findOne($id))
         {
             return back();
         }
@@ -82,13 +91,14 @@ class SupportController extends Controller
         return redirect()->route('supports.index');
     }
 
-    public function destroy(Support $support, string | int $id)
+    public function destroy(string $id)
     {
-        if(!$support = $support->find($id))
-        {
-            return back();
-        }
-        $support->delete();
+        //if(!$support = $support->find($id))
+        // if(!$support = )
+        // {
+        //     return back();
+        // }
+        $this->service->delete($id);
         return redirect()->route('supports.index');
     }
 
