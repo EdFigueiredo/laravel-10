@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateSupport;
 use App\Models\Support;
 use App\Services\SupportService;
+use App\DTO\CreateSupportDTO;
+use App\DTO\UpdateSupportDTO;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
@@ -33,6 +35,9 @@ class SupportController extends Controller
 
     public function store(StoreUpdateSupport $request, Support $support)
     {
+
+        $this->service->new(CreateSupportDTO::makeFromRequest($request)
+);
         //dd($request->all());
         //dd($request->body); // Aqui eu pego o valor do campo body
         //dd($request->only('subject','status', 'body'));
@@ -43,8 +48,7 @@ class SupportController extends Controller
         //Support::created($data); //Chama o model Support e chama o método create passando o array $data
         //$support = $support->create($data); // Aqui eu crio um objeto do tipo Support e chamo o método create passando o array $data
         //dd($support);
-        $support->create($data);
-
+        //$support->create($data);
         return redirect()->route('supports.index');
     }
 
@@ -73,7 +77,9 @@ class SupportController extends Controller
 
     public function update(StoreUpdateSupport $request, Support $support, string | int $id)
     {
-        if(!$support = $support->find($id))
+        $support = $this->service->update(UpdateSupportDTO::makeFromRequest($request));
+
+        if(!$support)
         {
             return back();
         }
@@ -86,7 +92,6 @@ class SupportController extends Controller
         //     'subject',
         //     'body'
         // ));
-        $support->update($request->validate()); // anteriormente eu usava o only, mas agora estou usando o validate para validar os campos
 
         return redirect()->route('supports.index');
     }

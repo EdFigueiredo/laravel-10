@@ -33,7 +33,7 @@ class StoreUpdateSupport extends FormRequest
                 'min:3',
                 'max:255',
                 //"unique:supports,subject,{$this->id},id"
-                Rule::unique('supports')->ignore($this->id),
+                Rule::unique('supports')->ignore($this->id), // Aqui eu uso o Rule para ignorar o id atual // como boa prática deixar a vírgula no final.
             ];
         }
     
