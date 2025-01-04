@@ -43,7 +43,7 @@ class SupportController extends Controller
         //dd($request->only('subject','status', 'body'));
         //dd($request->get('xpto', 'default')); // Aqui eu pego o valor do campo xpto, se não existir, ele retorna o valor default
         //$data = $request->all();
-        $data = $request->validate(); // Aqui eu valido os campos conforme as regras que eu defini no arquivo StoreUpdateSupport.php
+        $data = $request->validated(); // Aqui eu valido os campos conforme as regras que eu defini no arquivo StoreUpdateSupport.php
         $data['status'] = 'a';
         //Support::created($data); //Chama o model Support e chama o método create passando o array $data
         //$support = $support->create($data); // Aqui eu crio um objeto do tipo Support e chamo o método create passando o array $data
