@@ -23,7 +23,7 @@ class SupportController extends Controller
     {
         //$support = new Support(); // Sem eu precisar criar o objeto, o laravel já faz isso pra mim
         $supports = $this->service->getAll($request->filter); // Aqui eu chamo o método getAll do service e passo o filtro que eu quero
-        dd($supports);
+        //dd($supports);
 
         return view('admin.supports.index', compact('supports')); // aqui posso usar tanto o . quando / para separar os diretórios
     }
