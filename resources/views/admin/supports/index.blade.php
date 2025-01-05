@@ -12,7 +12,7 @@
             <tr>
                 {{-- <td> {{ $support->subject }} </td> //Aqui chama como objeto e devemos chamar como array --}}
                 <td> {{ $support->subject }} </td>
-                <td> {{ $support->status }} </td>
+                <td> {{ getStatusSupport($support->status) }} </td>
                 <td> {{ $support->body }} </td>
                 <td> 
                     <a href="{{ route('supports.show', $support->id) }}">Ir</a>

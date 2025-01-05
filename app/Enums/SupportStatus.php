@@ -8,11 +8,11 @@ enum SupportStatus: string
     case C = "Closed";
     case P = "Pendent";
 
-    public static function fromValue(string $value): string
+    public static function fromValue(string $name): string
     {
         foreach (self::cases() as $status)
         {
-            if ($status === $status->name)
+            if ($name === $status->name)
             {
                 return $status->value;
             }
