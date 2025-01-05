@@ -21,11 +21,17 @@ class SupportController extends Controller
     
     public function index(Request $request) // Aqui o laravel já cria o objeto do tipo Support e injeta na varivel $support
     {
-        //$support = new Support(); // Sem eu precisar criar o objeto, o laravel já faz isso pra mim
-        $supports = $this->service->getAll($request->filter); // Aqui eu chamo o método getAll do service e passo o filtro que eu quero
-        //dd($supports);
+        
+        $supports = $this->service->paginate(
+            page: $request->get('page',1),
+            totalPerPage: $request->get('per_page', 1),
+            filter: $request->filter,
+        ); 
+        //dd($supports->items());
 
-        return view('admin.supports.index', compact('supports')); // aqui posso usar tanto o . quando / para separar os diretórios
+        $filters = ['filter' => $request->get('filter', '')];
+    
+        return view('admin.supports.index', compact('supports', 'filters')); // aqui posso usar tanto o . quando / para separar os diretórios
     }
 
     public function create()

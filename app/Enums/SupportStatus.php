@@ -8,14 +8,16 @@ enum SupportStatus: string
     case C = "Closed";
     case P = "Pendent";
 
-    public static function fromValue(string $name): string
+    public static function fromValue(string $value): string
     {
-        foreach (self::cases() as $status) {
-            if ($name === $status->name) {
+        foreach (self::cases() as $status)
+        {
+            if ($status === $status->name)
+            {
                 return $status->value;
             }
         }
-
-        throw new \ValueError("$status is not a valid");
+        
+        throw new \ValueError("$status is not a valid status");
     }
 }
