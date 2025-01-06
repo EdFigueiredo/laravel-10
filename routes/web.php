@@ -6,11 +6,11 @@ use App\Http\Controllers\Admin\{SupportController};
 use App\Models\Support;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/test', function()
-{
-    //dd(SupportStatus::cases());
-    dd(array_column(SupportStatus::cases(), 'name'));
-});
+// Route::get('/test', function(){
+//     //dd(SupportStatus::cases());
+//     dd(array_column(SupportStatus::cases(), 'name'));
+// });
+//Route::resource('/supports', SupportController::class); // dessa forma ele cria todas as rotas de um crud, mas nao tem controle de varias requsições de um mesmo IP.
 
 Route::delete('/supports/{id}', [SupportController::class, 'destroy'])->name('supports.destroy');
 
