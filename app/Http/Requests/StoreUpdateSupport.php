@@ -27,13 +27,14 @@ class StoreUpdateSupport extends FormRequest
             'body' => ['required', 'min:3', 'max:100000'],
         ];
     
-        if ($this->method() === 'PUT') {
+        if ($this->method() === 'PUT' || $this->method() === 'PATCH') {
+
             $rules['subject'] = [
                 'required',
                 'min:3',
                 'max:255',
                 //"unique:supports,subject,{$this->id},id"
-                Rule::unique('supports')->ignore($this->id), // Aqui eu uso o Rule para ignorar o id atual // como boa prática deixar a vírgula no final.
+                Rule::unique('supports')->ignore($this->id ?? $this->support), // Aqui eu uso o Rule para ignorar o id atual // como boa prática deixar a vírgula no final.
             ];
         }
     
