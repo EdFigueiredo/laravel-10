@@ -11,6 +11,8 @@ use App\DTO\Supports\CreateSupportDTO;
 use App\DTO\Supports\UpdateSupportDTO;
 use App\Http\Resources\SupportResource;
 use Illuminate\Http\Response;
+use Spatie\FlareClient\Api;
+use App\Adapters\ApiAdapter;
 
 class SupportControler extends Controller
 {
@@ -30,16 +32,7 @@ class SupportControler extends Controller
             totalPerPage: $request->get('per_page', 1),
             filter: $request->filter,
         );
-        return SupportResource::collection($supports->items())->additional([
-            'meta' => [
-                'total' => $supports->total(),
-                'is_first_page' => $supports->isFirstPage(),
-                'is_last_page' => $supports->isLastPage(),
-                'current_page' => $supports->currentPage(),
-                'next_page' => $supports->getNumberNextPage(),
-                'previous_page' => $supports->getNumberPreviousPage(),
-            ]
-        ]);
+        return ApiAdapter::toJson($supports);
     }
 
     /**
