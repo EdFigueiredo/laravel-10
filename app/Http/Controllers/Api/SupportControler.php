@@ -29,7 +29,7 @@ class SupportControler extends Controller
         //$supports = Support::paginate();
         $supports = $this->service->paginate(
             page: $request->get('page', 1),
-            totalPerPage: $request->get('per_page', 1),
+            totalPerPage: $request->get('per_page',1),
             filter: $request->filter,
         );
         return ApiAdapter::toJson($supports);
